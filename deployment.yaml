@@ -1,0 +1,87 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: "cart-learning"
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cart-learning
+      store: ""
+  template:
+    metadata:
+      labels:
+        app: cart-learning
+        store: ""
+    spec:
+      containers:
+      - name: cart-learning
+        image: gcr.io/prod-awmfric-q1w2e3/cart-learning
+        imagePullPolicy: Always
+        volumeMounts:
+        - name: cred
+          mountPath: /creds/
+          readOnly: true
+        - name: cartconfig
+          mountPath: /cartconfig/
+          readOnly: true
+        env:
+          - name: CART_BRANCH 
+            value: "buzz"
+          - name: CART_VERSION
+            value: "3.2.2"
+          - name: CART_MODE 
+            value: "DEV"
+          - name: PYTHONUNBUFFERED
+            value: "True"
+          - name: PYTHONIOENCODING
+            value: UTF-8
+          - name: GLOBAL_CASSANDRA_ADDRESS
+            value: "global-cassandra.monitoring"
+          - name: ANALYZER_PORT
+            value: "5005"
+          - name: PROMETHEUS_PORT
+            value: "8000"
+        envFrom:
+          - secretRef:
+              name: connectionsecrets
+          - secretRef:
+              name: cloudsecrets
+          - configMapRef:
+              name: connectionconfig
+          - configMapRef:
+              name: storeinfo
+          - secretRef:
+              name: mlflow-credentials
+              optional: true
+          - configMapRef:
+              name: cartinfo
+        ports:
+            - containerPort: 5005
+      imagePullSecrets: 
+        - name: "prodawmfricgcr" # TODO: This probably shouldn't be hard coded
+      volumes:
+      - name: cartconfig
+        configMap: 
+          name: cartinfo
+      - name: mlflow-credentials
+        secret:
+          secretName: mlflow-credentials
+          optional: true 
+          items:
+          - key: MLFLOW_TRACKING_USERNAME
+            path: MLFLOW_TRACKING_USERNAME
+          - key: MLFLOW_TRACKING_PASSWORD
+            path: MLFLOW_TRACKING_PASSWORD
+      - name: cred
+        secret:
+          secretName: connectionsecrets
+          optional: true
+          items:
+          - key: KAFKA_CLUSTER_CRT
+            path: kafka-cluster-ca.crt
+          - key: KAFKA_USER_CRT
+            path: kafka-user.crt
+          - key: KAFKA_USER_KEY
+            path: kafka-user.key
