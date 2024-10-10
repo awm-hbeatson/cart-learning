@@ -4,7 +4,7 @@ metadata:
   name: cart-learning
 build:
   artifacts:
-    - image: gcr.io/prod-awmfric-q1w2e3/cart-trigger
+    - image: gcr.io/prod-awmfric-q1w2e3/cart-learning
       platforms: [linux/amd64]
       docker:
         dockerfile: Dockerfile

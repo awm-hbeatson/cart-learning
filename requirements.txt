@@ -17,6 +17,10 @@ flask-swagger-ui
 python-prtree
 typing
 prometheus_client
+opentelemetry-api
+opentelemetry-sdk
+opentracing~=2.4.0
+gunicorn
 couchdb
 mlflow
 scikit-learn

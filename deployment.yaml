@@ -26,6 +26,10 @@ spec:
         - name: cartconfig
           mountPath: /cartconfig/
           readOnly: true
+        - mountPath: /storeinfo/
+          name: storeinfo
+          readOnly: true
+  
         env:
           - name: CART_BRANCH 
             value: "buzz"
@@ -62,6 +66,13 @@ spec:
       imagePullSecrets: 
         - name: "prodawmfricgcr" # TODO: This probably shouldn't be hard coded
       volumes:
+      - name: storeinfo
+        configMap:
+          name: storeinfo
+          optional: true
+          items:
+            - key: storeinfo
+              path: storeinfo
       - name: cartconfig
         configMap: 
           name: cartinfo

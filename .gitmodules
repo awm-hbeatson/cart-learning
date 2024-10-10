@@ -1,0 +1,6 @@
+[submodule "src/awm_connector"]
+	path = src/awm_connector
+	url = git@github.com:AWM-DEV/awm_connector.git
+[submodule "src/cart_tools"]
+	path = src/cart_tools
+	url = git@github.com:awm-hbeatson/cart_tools.git

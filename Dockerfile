@@ -9,8 +9,8 @@ RUN apt-get update && apt-get upgrade -y python3-pip python3-distutils && apt-ge
 COPY requirements.txt requirements.txt
 RUN pip3 install -r requirements.txt
 
-# RUN pip3 install opentelemetry-distro opentelemetry-exporter-otlp opentelemetry-instrumentation-logging
-# RUN opentelemetry-bootstrap -a install
+RUN pip3 install opentelemetry-distro opentelemetry-exporter-otlp opentelemetry-instrumentation-logging
+RUN opentelemetry-bootstrap -a install
 
 
 # Copy scripts folder into image
